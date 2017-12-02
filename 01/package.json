@@ -20,6 +20,9 @@
       "node": true,
       "es6": true
     },
-    "globals": ["describe", "it"]
+    "globals": [
+      "describe",
+      "it"
+    ]
   }
 }
