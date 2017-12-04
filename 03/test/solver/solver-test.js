@@ -83,11 +83,25 @@ describe('Solver', () => {
       assert.equals(output, 5)
     })
 
-    // it('should return 10 for 5', () => {
-    //   const input = 5
-    //   const output = solver.stress(input)
+    it('should return 10 for 5', () => {
+      const input = 5
+      const output = solver.stress(input)
 
-    //   assert.equals(output, 10)
-    // })
+      assert.equals(output, 10)
+    })
+
+    it('should return 26 for 25', () => {
+      const input = 25
+      const output = solver.stress(input)
+
+      assert.equals(output, 26)
+    })
+
+    it('should return 806 for 747', () => {
+      const input = 747
+      const output = solver.stress(input)
+
+      assert.equals(output, 806)
+    })
   })
 })

@@ -1,4 +1,5 @@
 const mover = require('./mover')
+const isNeighbor = require('./is-neighbor')
 /**
  * Each square on the grid is allocated in a spiral pattern
  * starting at a location marked 1 and then counting up
@@ -84,33 +85,13 @@ function calculateTargetGridPosition (targetValue) {
   })
 }
 
-function isDiagonalNeighbor (cell, candidate) {
-  return Math.abs(candidate.x) - 1 === cell.x &&
-    Math.abs(candidate.y) - 1 === cell.y
-}
-
-function isVerticalNeighbor (cell, candidate) {
-  return candidate.x === cell.x &&
-    Math.abs(candidate.y) - 1 === cell.y
-}
-
-function isHorizontalNeighbor (cell, candidate) {
-  return candidate.y === cell.y &&
-    Math.abs(candidate.x) - 1 === cell.x
-}
-
 function calcStressValue (grid, position) {
   const neighbors = grid.filter((cell) => {
-    return isDiagonalNeighbor(position, cell) ||
-      isVerticalNeighbor(position, cell) ||
-      isHorizontalNeighbor(position, cell)
+    return isNeighbor(position, cell)
   })
-  console.log('Neighbors for ', position, neighbors)
   const value = neighbors.reduce((sum, current) => {
     return sum + current.value
   }, 0)
-
-  console.log('Returning ', value, ' for ', position)
 
   return value
 }
@@ -124,15 +105,20 @@ module.exports = {
     let xyBoundary = 1
     const grid = []
     grid.push(createCell(0, 0, 1))
+    let moveCount = 0
 
-    while (grid[grid.length - 1].value <= input && grid.length < 10) {
+    while (grid[grid.length - 1].value <= input) {
+      let circ = 8 * xyBoundary
       const move = mover(grid, xyBoundary)
       grid.push(Object.assign({}, move, {
         value: calcStressValue(grid, move)
       }))
 
-      if (move.x === xyBoundary && move.y === -1) {
+      moveCount += 1
+
+      if (moveCount === circ) {
         xyBoundary += 1
+        moveCount = 0
       }
     }
 
