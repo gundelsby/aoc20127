@@ -1,3 +1,4 @@
+const mover = require('./mover')
 /**
  * Each square on the grid is allocated in a spiral pattern
  * starting at a location marked 1 and then counting up
@@ -18,11 +19,11 @@
  * between the location of the data and square 1.
  */
 
-function createCell(x, y, value) {
+function createCell (x, y, value) {
   return { x, y, value }
 }
 
-function drawRing(lastCell, xyBoundary) {
+function drawRing (lastCell, xyBoundary) {
   const ring = []
   const sideLength = xyBoundary * 2 + 1
   const startY = lastCell.y
@@ -56,7 +57,7 @@ function drawRing(lastCell, xyBoundary) {
   return ring
 }
 
-function calculateTargetGridPosition(targetValue) {
+function calculateTargetGridPosition (targetValue) {
   /**
    * for every expansion, xBoundary increase by 2 and y by 2
    * 0,0 is center, meaning that expansion is in either end
@@ -83,9 +84,60 @@ function calculateTargetGridPosition(targetValue) {
   })
 }
 
+function isDiagonalNeighbor (cell, candidate) {
+  return Math.abs(candidate.x) - 1 === cell.x &&
+    Math.abs(candidate.y) - 1 === cell.y
+}
+
+function isVerticalNeighbor (cell, candidate) {
+  return candidate.x === cell.x &&
+    Math.abs(candidate.y) - 1 === cell.y
+}
+
+function isHorizontalNeighbor (cell, candidate) {
+  return candidate.y === cell.y &&
+    Math.abs(candidate.x) - 1 === cell.x
+}
+
+function calcStressValue (grid, position) {
+  const neighbors = grid.filter((cell) => {
+    return isDiagonalNeighbor(position, cell) ||
+      isVerticalNeighbor(position, cell) ||
+      isHorizontalNeighbor(position, cell)
+  })
+  console.log('Neighbors for ', position, neighbors)
+  const value = neighbors.reduce((sum, current) => {
+    return sum + current.value
+  }, 0)
+
+  console.log('Returning ', value, ' for ', position)
+
+  return value
+}
+
 module.exports = {
-  spiral: (targetValue) => {
+  sequential: (targetValue) => {
     const { x, y } = calculateTargetGridPosition(targetValue)
     return Math.abs(x) + Math.abs(y)
+  },
+  stress: (input) => {
+    let xyBoundary = 1
+    const grid = []
+    grid.push(createCell(0, 0, 1))
+
+    while (grid[grid.length - 1].value <= input && grid.length < 10) {
+      const move = mover(grid, xyBoundary)
+      grid.push(Object.assign({}, move, {
+        value: calcStressValue(grid, move)
+      }))
+
+      if (move.x === xyBoundary && move.y === -1) {
+        xyBoundary += 1
+      }
+    }
+
+    return grid.find((cell) => {
+      return cell.value > input
+    }).value
   }
 }
