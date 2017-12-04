@@ -104,16 +104,16 @@ module.exports = {
   stress: (input) => {
     let xyBoundary = 1
     const grid = []
-    grid.push(createCell(0, 0, 1))
+    let move = createCell(0, 0, 1) 
+    grid.push(move)
     let moveCount = 0
 
-    while (grid[grid.length - 1].value <= input) {
+    while (move.value <= input) {
       let circ = 8 * xyBoundary
-      const move = mover(grid, xyBoundary)
-      grid.push(Object.assign({}, move, {
-        value: calcStressValue(grid, move)
-      }))
+      move = mover(grid, xyBoundary)
+      move.value = calcStressValue(grid, move)
 
+      grid.push(move)
       moveCount += 1
 
       if (moveCount === circ) {
@@ -122,8 +122,6 @@ module.exports = {
       }
     }
 
-    return grid.find((cell) => {
-      return cell.value > input
-    }).value
+    return grid[grid.length - 1].value
   }
 }

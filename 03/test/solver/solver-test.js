@@ -97,6 +97,13 @@ describe('Solver', () => {
       assert.equals(output, 26)
     })
 
+    it('should return 54 for 26', () => {
+      const input = 26
+      const output = solver.stress(input)
+
+      assert.equals(output, 54)
+    })
+
     it('should return 806 for 747', () => {
       const input = 747
       const output = solver.stress(input)

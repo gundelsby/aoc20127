@@ -22,4 +22,11 @@ describe('isNeighbor', () => {
 
     refute(isNeighbor(a, b))
   })
+
+  it('should return true for -2,2 and -1,2', () => {
+    const a = {x: -2, y: 2}
+    const b = {x: -2, y: 2}
+
+    assert(isNeighbor(a, b))
+  })
 })

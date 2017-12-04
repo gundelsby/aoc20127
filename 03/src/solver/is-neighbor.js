@@ -1,7 +1,7 @@
 function calcDistance (a, b) {
   const sorted = [a, b].sort()
 
-  return sorted[1] - sorted[0]
+  return Math.abs(sorted[1] - sorted[0])
 }
 
 module.exports = (a, b) => {
