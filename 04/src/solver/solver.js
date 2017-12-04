@@ -1,10 +1,8 @@
-const liner = require('./liner')
-
 module.exports = {
-  getValidPhraseCount: (input) => {
+  getValidPhraseCount: (input, validator) => {
     const lines = input.split(/\n/)
     return lines.reduce((numValid, line) => {
-      if (liner.isValid(line)) {
+      if (validator(line)) {
         return numValid + 1
       }
 
