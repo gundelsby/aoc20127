@@ -1,0 +1,28 @@
+{
+  "name": "aoc2017-01",
+  "version": "1.0.0",
+  "description": "Day 1",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --recursive test",
+    "test:watch": "npm test -- --reporter min -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "formatio": "^1.2.0",
+    "mocha": "^4.0.1",
+    "referee": "^1.2.0"
+  },
+  "standard": {
+    "env": {
+      "mocha": true,
+      "node": true,
+      "es6": true
+    },
+    "globals": [
+      "describe",
+      "it"
+    ]
+  }
+}
