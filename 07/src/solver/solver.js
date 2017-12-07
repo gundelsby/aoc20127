@@ -1,4 +1,6 @@
 const liner = require('./liner')
+const tree = require('./tree')
+const scale = require('./node-scale')
 
 module.exports = {
   findRoot: (lines) => {
@@ -13,5 +15,9 @@ module.exports = {
       node.nodes.forEach(name => nodesWithParents.add(name))
     })
     return nodes.filter(node => !nodesWithParents.has(node.name))[0]
+  },
+  findFatty: (lines) => {
+    const root = tree.build(lines)
+    return scale.calcWeight(root)
   }
 }
