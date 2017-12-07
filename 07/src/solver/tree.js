@@ -9,7 +9,7 @@ module.exports = {
       nodeMap[node.name] = node
     })
     const root = nodes.find((node) => {
-      return !nodesWithParents.has(node)
+      return !nodesWithParents.has(node.name)
     })
 
     function addChildren (nodeArray) {
@@ -26,6 +26,7 @@ module.exports = {
         }
       })
     }
+
     root.nodes = addChildren(root.nodes)
 
     return root

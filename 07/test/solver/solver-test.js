@@ -10,7 +10,7 @@ describe('Solver', () => {
   describe('findRoot', () => {
     it ('should return the tknk node', () => {
       const output = solver.findRoot(testData)
-      const expected = liner.parseNode(testData[8])
+      const expected = liner.parseNode(testData[8]).name
 
       assert.equals(output, expected)
     })
