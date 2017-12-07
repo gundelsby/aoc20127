@@ -5,14 +5,13 @@ module.exports = {
     const nodes = lines.map((line) => {
       return liner.parseNode(line)
     })
+    .filter((node) => node.nodes !== null) // nodes that aren't parents are irrelevant for this case
 
     // find nodes with parents
-    const nodesWithParents = []
-    nodes.filter((node) => node.nodes !== null)
-      .forEach((node) => {
-        nodes.forEach((nodesWithParents.push))
+    const nodesWithParents = new Set()
+    nodes.forEach((node) => {
+      node.nodes.forEach(name => nodesWithParents.add(name))
     })
-
-    const 
+    return nodes.filter(node => !nodesWithParents.has(node.name))[0]
   }
 }
