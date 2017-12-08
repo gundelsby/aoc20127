@@ -4,7 +4,8 @@ module.exports = {
     return {
       register: parts[0],
       instruction: parts[1],
-      value: Number.parseInt(parts[2], 10)
+      value: Number.parseInt(parts[2], 10),
+      condition: parts.slice(4).join(' ')
     }
   }
 }
