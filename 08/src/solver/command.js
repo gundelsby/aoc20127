@@ -1,7 +1,10 @@
 module.exports = {
   parse: (commandString) => {
+    const parts = commandString.split(' ')
     return {
-      register: commandString.split(' ')[0]
+      register: parts[0],
+      instruction: parts[1],
+      value: Number.parseInt(parts[2], 10)
     }
   }
 }
