@@ -1,16 +1,22 @@
-const registers = {}
+class Registers {
+  constructor () {
+    this.registers = {}
+  }
 
-module.exports = {
-  read: (address) => {
-    return registers[address] || 0
-  },
-  write: (address, value) => {
-    registers[address] = value
-  },
-  getMaxValue: () => {
-    return Object.values(registers)
+  read (address) {
+    return this.registers[address] || 0
+  }
+
+  write (address, value) {
+    this.registers[address] = value
+  }
+
+  getMaxValue () {
+    return Object.values(this.registers)
       .reduce((max, value) => {
         return max > value ? max : value
-      })
+      }, 0)
   }
 }
+
+module.exports = Registers
