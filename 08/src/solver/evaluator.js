@@ -10,7 +10,7 @@ module.exports = {
     const a = getRealValue(parts[0], getRegisterValue)
     const b = getRealValue(parts[2], getRegisterValue)
     const exprWithValues = `${a} ${parts[1]} ${b}`
-    console.log(expression, exprWithValues, eval(exprWithValues))
+    
     return eval(exprWithValues)
   }
 }
