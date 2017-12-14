@@ -24,6 +24,13 @@ describe('Array tools', () => {
 
       assert.equals(output, [3, 1, 2])
     })
+
+    it('should return [3, 4, 2, 1] for [2, 1, 0, 3, 4] starting at 3 with size 4', () => {
+      const arr = [2, 1, 0, 3, 4]
+      const output = circularSelect(arr, 3, 4)
+
+      assert.equals(output, [3, 4, 2, 1])
+    })
   })
 
   describe('circularReplace', () => {
@@ -65,6 +72,12 @@ describe('Array tools', () => {
       const output = calcCircularPosition(3, 3, 4)
 
       assert.equals(output, 2)
+    })
+
+    it('should return 0 when position=3, steps=1, size=4', () => {
+      const output = calcCircularPosition(3, 1, 4)
+
+      assert.equals(output, 0)
     })
   })
 })

@@ -1,10 +1,10 @@
 module.exports = {
   circularSelect: (arr, start, size) => {
-    let selection = arr.slice(start, size)
+    let selection = arr.slice(start, start + size)
     if (selection.length < size) {
       selection = selection.concat(arr.slice(0, size - selection.length))
     }
-    
+
     return selection
   },
   circularReplace: (arr, newValues, start) => {
@@ -24,6 +24,14 @@ module.exports = {
       return position
     }
 
-    return position + steps <= arraySize - 1 ? position + steps : position + arraySize % steps
+    const min = 0
+    const max = arraySize - 1
+    let newPos = position + steps
+
+    while (newPos > max) {
+      newPos -= arraySize
+    }
+
+    return newPos
   }
 }
