@@ -1,5 +1,15 @@
 const hasher = require('./hasher')
 
+const DEFAULT_LIST_SIZE = 256
+
+function createList (size = DEFAULT_LIST_SIZE) {
+  const list = []
+  for (let i = 0; i < size; i++) {
+    list.push(i)
+  }
+  return list
+}
+
 function createLengthsFromStrings (strings) {
   const lengths = []
   strings.forEach(s => {
@@ -16,16 +26,16 @@ function createLengthsFromStrings (strings) {
 function createSparseHash (lengths) {
   let position = 0
   let skipSize = 0
-  let hashArr = []
+  let list = createList()
 
   for (let i = 0; i < 64; i++) {
-    const result = hasher(lengths, position, skipSize)
+    const result = hasher({lengths, position, skipSize, list})
     position = result.position
     skipSize = result.skipSize
-    hashArr = result.hash
+    list = result.hash
   }
 
-  return hashArr
+  return list
 }
 
 function createDenseHash (sparseHash, chunkSize) {
@@ -36,7 +46,6 @@ function createDenseHash (sparseHash, chunkSize) {
   }
 
   return chunks.map(chunk => {
-    console.log(chunk)
     return chunk.reduce((result, number) => {
       return result ^ number
     })
@@ -45,7 +54,8 @@ function createDenseHash (sparseHash, chunkSize) {
 
 module.exports = {
   part1: (lengths, listSize) => {
-    const result = hasher({lengths, listSize})
+    const list = createList(listSize)
+    const result = hasher({lengths, list})
 
     return result.hash[0] * result.hash[1]
   },
@@ -53,7 +63,6 @@ module.exports = {
     const lengths = createLengthsFromStrings(strings)
     const sparseArr = createSparseHash(lengths)
     const dense = createDenseHash(sparseArr, 16)
-    console.log(dense)
 
     return dense.map(base10 => {
       const hex = base10.toString(16)
