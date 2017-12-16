@@ -38,11 +38,11 @@ describe('Moves', () => {
 
   describe('Partner', () => {
   // Partner, written pA/B, makes the programs named A and B swap places.
-    it*'should return abdce for cd on abcde', () => {
+    it('should return abdce for cd on abcde', () => {
       const input = ['a', 'b', 'c', 'd', 'e']
       const output = moves.partner({input, nameA: 'c', nameB: 'd'})
 
       assert.equals(output, ['a', 'b', 'd', 'c', 'e'])
-    }
+    })
   })
 })
