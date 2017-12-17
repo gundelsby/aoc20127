@@ -20,8 +20,8 @@ class Spinner {
     this.currentValue = 0
   }
 
-  move () {
-    this.position = calcCircularPosition(this.position, this.stepSize, this.buffer.length)
+  move (bufferLength) {
+    this.position = calcCircularPosition(this.position, this.stepSize, bufferLength || this.buffer.length)
   }
 
   insert (value) {

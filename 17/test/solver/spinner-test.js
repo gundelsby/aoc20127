@@ -25,6 +25,14 @@ describe('Spinner', () => {
 
       assert.equals(spinner.buffer, [0, 2, 1])
     })
+
+    it('should ensure buffer value [0, 2, 3, 1] after third spin', () => {
+      spinner.spin()
+      spinner.spin()
+      spinner.spin()
+
+      assert.equals(spinner.buffer, [0, 2, 3, 1])
+    })
   // 0 (2) 1: the spinlock steps forward three times (0, 1, 0), and then inserts the second value, 2, after it. 2 becomes the current position.
   // 0  2 (3) 1: the spinlock steps forward three times (1, 0, 2), and then inserts the third value, 3, after it. 3 becomes the current position.
   // And so on:
