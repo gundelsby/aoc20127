@@ -4,7 +4,7 @@ const {assert, refute} = require('../test-helper')
 describe('Layer', () => {
   it('should have scanner position at 0 on init', () => {
     const layer = new Layer(1)
-    
+
     assert.equals(layer.scannerPosition, 0)
   })
 
