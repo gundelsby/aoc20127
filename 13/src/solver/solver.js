@@ -2,14 +2,14 @@ const Layer = require('./layer')
 
 function increaseTick (firewall) {
   Object.values(firewall).forEach((layer) => {
-    console.log('Tick')
     layer.tick()
   })
 }
 
-function walkThroughTheFire (layers, delay = 0) {
+function createFirewall (layers) {
   const firewall = {}
   let lastLayer = 0
+  
   layers.forEach((line) => {
     const parts = line.match(/(\d+):\s(\d+)/)
     firewall[parts[1]] = new Layer(parts[2])
@@ -18,10 +18,11 @@ function walkThroughTheFire (layers, delay = 0) {
     }
   })
 
-  for (let i = 0; i < delay; i++) {
-    console.log('Delay', i)
-    increaseTick(firewall)
-  }
+  return {firewall, lastLayer}
+}
+
+function walkThroughTheFire (layers) {
+  const {firewall, lastLayer} = createFirewall(layers)
 
   let severity = 0
   for (let i = 0; i < lastLayer + 1; i++) {
@@ -29,11 +30,26 @@ function walkThroughTheFire (layers, delay = 0) {
       severity += firewall[i].getSeverity(i)
       delete firewall[i]
     }
+    increaseTick(firewall)
   }
 
-  increaseTick(firewall)
-
   return severity
+}
+
+function tripTheAlarm (layers, delay = 0) {
+  const {firewall, lastLayer} = createFirewall(layers)
+  
+  let position = 0 - delay
+  for (let i = 0; position < lastLayer + 1; i++) {
+    if (firewall[position]) {
+      if (position % (firewall[position].range - 1) === 0) {
+        return true
+      }
+    }
+    position++
+  }
+
+  return false
 }
 
 module.exports = {
@@ -42,11 +58,7 @@ module.exports = {
   },
   part2: (input) => {
     let delay = 0
-    let workingDelay = walkThroughTheFire(input, delay) === 0
-    while (!workingDelay) {
-      const severity = walkThroughTheFire(input, ++delay)
-      console.log(`Delay: ${delay}, severity: ${severity}`)
-      workingDelay = severity === 0
+    while (!tripTheAlarm(input, delay++)) {
     }
 
     return delay
