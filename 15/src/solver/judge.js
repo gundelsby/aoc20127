@@ -1,12 +1,3 @@
-function getLower16BitString (number) {
-  const binary = number.toString(2)
-  return binary.length > 16 ? binary.slice(binary.length - 16) : binary.padStart(16, '0')
-}
-
-function isMatch (aValue, bValue) {
-  return getLower16BitString(aValue) === getLower16BitString(bValue)
-}
-
 class Judge {
   constructor (genA, genB) {
     this.genA = genA
@@ -16,7 +7,7 @@ class Judge {
   run (cycles) {
     let matches = 0
     for (let i = 0; i < cycles; i++) {
-      if (isMatch(this.genA.generate(), this.genB.generate())) {
+      if ((this.genA.generate() & 0x0000ffff) === (this.genB.generate() & 0x0000ffff)) {
         matches++
       }
     }
@@ -27,7 +18,7 @@ class Judge {
   runDiscriminatory (cycles) {
     let matches = 0
     for (let i = 0; i < cycles; i++) {
-      if (isMatch(this.genA.getDiscriminatedValue(), this.genB.getDiscriminatedValue())) {
+      if ((this.genA.getDiscriminatedValue() & 0x0000ffff) === (this.genB.getDiscriminatedValue() & 0x0000ffff)) {
         matches++
       }
     }
