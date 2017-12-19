@@ -2,63 +2,63 @@ const liner = require('./liner')
 const tree = require('./tree')
 const scale = require('./node-scale')
 
+function findUnbalancedTree (node) {
+  if (!node.nodes) {
+    return null
+  }
+
+  const nodesByWeight = {}
+  node.nodes.forEach(child => {
+    const weight = scale.calcWeight(child)
+    if (nodesByWeight[weight]) {
+      nodesByWeight[weight].push(child)
+    } else {
+      nodesByWeight[weight] = [child]
+    }
+  })
+  const weights = Object.keys(nodesByWeight)
+  if (weights.length === 1) {
+    return null
+  }
+  const outlier = weights.filter(key => {
+    return nodesByWeight[key].length === 1
+  })[0]
+
+  if (nodesByWeight[outlier] && nodesByWeight[outlier][0]) {
+    const unbalanced = nodesByWeight[outlier][0]
+    const diff = weights.map(Number).sort().reverse().reduce((sum, weight) => {
+      return sum - weight
+    })
+    const weight = unbalanced.weight - diff
+    return {
+      weight,
+      unbalanced
+    }
+  } else {
+    return null
+  }
+}
+
 module.exports = {
   findRoot: (lines) => {
-    const nodes = lines.map((line) => {
+    return tree.build(lines.map(line => {
       return liner.parseNode(line)
-    })
-    .filter((node) => node.nodes !== null) // nodes that aren't parents are irrelevant for this case
-
-    // find nodes with parents
-    const nodesWithParents = new Set()
-    nodes.forEach((node) => {
-      if (node.nodes) {
-        node.nodes.forEach(name => nodesWithParents.add(name))
-      }
-    })
-    return nodes.filter(node => !nodesWithParents.has(node.name))[0].name
+    })).name
   },
   findFatty: (lines) => {
     const root = tree.build(lines.map(line => {
       return liner.parseNode(line)
     }))
 
-    function findUnbalancer (node) {
-      const childrenByWeight = {}
-
-      if (node.nodes) {
-        node.nodes.forEach(node => {
-          const weight = scale.calcWeight(node)
-          childrenByWeight[weight] = !childrenByWeight[weight] ? [node] : childrenByWeight[weight].concat(node)
-        })
-        const unbalanced = Object.keys(childrenByWeight).filter(key => {
-          return childrenByWeight[key].length === 1
-        })[0]
-
-        return childrenByWeight[unbalanced][0]
+    let unbalanced = findUnbalancedTree(root)
+    let test = unbalanced
+    while (test) {
+      test = findUnbalancedTree(unbalanced.unbalanced)
+      if (test) {
+        unbalanced = test
       }
-
-      return null
     }
-
-    function recurse (node, func) {
-      if (!node) {
-        return
-      }
-
-      const next = func(node)
-      recurse(next, func)
-    }
-
-    recurse(root, (node) => {
-      const unbalanced = findUnbalancer(node)
-      console.log(node)
-      console.log('weight:', scale.calcWeight(node))
-      console.log('unbalanced: ', unbalanced)
-
-      return unbalanced
-    })
-
-    return scale.calcWeight(root)
+    
+    return unbalanced
   }
 }
