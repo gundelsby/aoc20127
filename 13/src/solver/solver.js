@@ -28,9 +28,7 @@ function walkThroughTheFire (layers) {
   return severity
 }
 
-function tripTheAlarm (layers, delay = 0) {
-  const {firewall} = createFirewall(layers)
-
+function tripTheAlarm (firewall, delay = 0) {
   return Object.keys(firewall).some(depth => {
     return ((delay + depth) % firewall[depth].period) === 0
   })
@@ -42,7 +40,9 @@ module.exports = {
   },
   part2: (input) => {
     let delay = 0
-    while (tripTheAlarm(input, delay++)) {
+    const {firewall} = createFirewall(input)
+    
+    while (tripTheAlarm(firewall, delay++)) {
       if ((delay % 100000) === 0) {
         console.log(`Delay: ${delay}`)
       }
