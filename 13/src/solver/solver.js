@@ -29,20 +29,11 @@ function walkThroughTheFire (layers) {
 }
 
 function tripTheAlarm (layers, delay = 0) {
-  const {firewall, lastLayer} = createFirewall(layers)
- 
-  let position = 0 - delay
-  for (let i = 0; position < lastLayer + 1; i++) {
+  const {firewall} = createFirewall(layers)
 
-    // const caughtByGuard = delay => ([depth, range]) => (delay + depth) % (2 * (range - 1)) === 0;
-
-    if (firewall[position] && firewall[position].isAtZero(i)) {
-      return true
-    }
-    position++
-  }
-
-  return false
+  return Object.keys(firewall).some(depth => {
+    return ((delay + depth) % firewall[depth].period) === 0
+  })
 }
 
 module.exports = {
@@ -52,6 +43,9 @@ module.exports = {
   part2: (input) => {
     let delay = 0
     while (tripTheAlarm(input, delay++)) {
+      if ((delay % 100000) === 0) {
+        console.log(`Delay: ${delay}`)
+      }
     }
 
     return delay
