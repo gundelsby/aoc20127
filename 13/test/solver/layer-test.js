@@ -5,7 +5,7 @@ describe('Layer', () => {
   it('should have scanner position at 0 on init', () => {
     const layer = new Layer(1)
 
-    assert.equals(layer.scannerPosition, 0)
+    assert(layer.isAtZero(0))
   })
 
   describe('getSeverity', () => {
@@ -19,7 +19,7 @@ describe('Layer', () => {
     })
   })
 
-  describe('tick with range = 3', () => {
+  describe('tests with range = 3', () => {
     const range = 3
     let layer
 
@@ -27,45 +27,24 @@ describe('Layer', () => {
       layer = new Layer(range)
     })
 
-    it('should have scanner at 1 after first tick', () => {
-      layer.tick()
-
-      assert.equals(layer.scannerPosition, 1)
+    it('is not at zero after 1 tick', () => {
+      refute(layer.isAtZero(1))
     })
 
-    it('should have scanner at 2 after second tick', () => {
-      layer.tick()
-      layer.tick()
-
-      assert.equals(layer.scannerPosition, 2)
+    it('is not at zero after 2 ticks', () => {
+      refute(layer.isAtZero(2))
     })
 
-    it('should have scanner at 1 after third tick', () => {
-      layer.tick()
-      layer.tick()
-      layer.tick()
-
-      assert.equals(layer.scannerPosition, 1)
+    it('is not at zero after 3 ticks', () => {
+      refute(layer.isAtZero(3))
     })
 
-    it('should have scanner at 0 after fourth tick', () => {
-      layer.tick()
-      layer.tick()
-      layer.tick()
-      layer.tick()
-
-      assert.equals(layer.scannerPosition, 0)
+    it('is at 0 after 4 ticks', () => {
+      assert(layer.isAtZero(4))
     })
 
-    it('should have scanner at 2 after sixth tick', () => {
-      layer.tick()
-      layer.tick()
-      layer.tick()
-      layer.tick()
-      layer.tick()
-      layer.tick()
-
-      assert.equals(layer.scannerPosition, 2)
+    it('is at 0 after 15016 ticks', () => {
+      assert(layer.isAtZero(15016))
     })
   })
 })

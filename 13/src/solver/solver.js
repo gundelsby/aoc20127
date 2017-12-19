@@ -1,15 +1,9 @@
 const Layer = require('./layer')
 
-function increaseTick (firewall) {
-  Object.values(firewall).forEach((layer) => {
-    layer.tick()
-  })
-}
-
 function createFirewall (layers) {
   const firewall = {}
   let lastLayer = 0
-  
+
   layers.forEach((line) => {
     const parts = line.match(/(\d+):\s(\d+)/)
     firewall[parts[1]] = new Layer(parts[2])
@@ -26,11 +20,9 @@ function walkThroughTheFire (layers) {
 
   let severity = 0
   for (let i = 0; i < lastLayer + 1; i++) {
-    if (firewall[i] && firewall[i].scannerPosition === 0) {
+    if (firewall[i] && firewall[i].isAtZero(i)) {
       severity += firewall[i].getSeverity(i)
-      delete firewall[i]
     }
-    increaseTick(firewall)
   }
 
   return severity
@@ -38,13 +30,14 @@ function walkThroughTheFire (layers) {
 
 function tripTheAlarm (layers, delay = 0) {
   const {firewall, lastLayer} = createFirewall(layers)
-  
+ 
   let position = 0 - delay
   for (let i = 0; position < lastLayer + 1; i++) {
-    if (firewall[position]) {
-      if (position % (firewall[position].range - 1) === 0) {
-        return true
-      }
+
+    // const caughtByGuard = delay => ([depth, range]) => (delay + depth) % (2 * (range - 1)) === 0;
+
+    if (firewall[position] && firewall[position].isAtZero(i)) {
+      return true
     }
     position++
   }
@@ -58,7 +51,7 @@ module.exports = {
   },
   part2: (input) => {
     let delay = 0
-    while (!tripTheAlarm(input, delay++)) {
+    while (tripTheAlarm(input, delay++)) {
     }
 
     return delay
