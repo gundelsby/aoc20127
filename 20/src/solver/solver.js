@@ -25,24 +25,20 @@ module.exports = {
       })
 
       return props
-    }).sort((a, b) => {
-      const aa = calcAbsolute(a.a)
-      const ba = calcAbsolute(b.a)
+    }).filter(particle => {
+      return calcAbsolute(particle.a) === 0
+    })
+    .sort((a, b) => {
+      const av = calcAbsolute(a.v)
+      const bv = calcAbsolute(b.v)
 
-      if (aa !== ba) {
-        return aa < ba ? -1 : 1
+      if (av !== bv) {
+        return av < bv ? -1 : 1
       } else {
-        const av = calcAbsolute(a.v)
-        const bv = calcAbsolute(b.v)
-  
-        if (av !== bv) {
-          return av < bv ? -1 : 1
-        } else {
-          const ap = calcAbsolute(a.p)
-          const bp = calcAbsolute(b.p)
+        const ap = calcAbsolute(a.p)
+        const bp = calcAbsolute(b.p)
 
-          return ap < bp ? -1 : ap === bp ? 0 : 1
-        }
+        return ap < bp ? -1 : ap === bp ? 0 : 1
       }
     })
 
@@ -51,5 +47,6 @@ module.exports = {
 
     console.log(a, calcAbsolute(a.a), calcAbsolute(a.v), calcAbsolute(a.p))
     console.log(b, calcAbsolute(b.a), calcAbsolute(b.v), calcAbsolute(b.p))
+    console.log(particles.length)
   }
 }
