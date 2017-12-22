@@ -1,6 +1,16 @@
+const mapper = require('./mapper')
+const Carrier = require('./carrier')
+
 module.exports = {
   part1: (input) => {
-    return null
+    const initial = mapper(input)
+    const carrier = new Carrier(initial)
+
+    for (let i = 0; i < 10000; i++) {
+      carrier.burst()
+    }
+
+    return carrier.nodesInfected
   },
   part2: (input) => {
     return null
