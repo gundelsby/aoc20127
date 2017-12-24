@@ -12,7 +12,6 @@ module.exports = (input) => {
         }
       })
       .filter(cell => cell.value === '#')
-      .map(cell => cell.x)
   })
 
   return infected

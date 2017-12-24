@@ -12,7 +12,14 @@ module.exports = {
 
     return carrier.nodesInfected
   },
-  part2: (input) => {
-    return null
+  part2: (input, wantedBursts) => {
+    const initial = mapper(input)
+    const carrier = new Carrier(initial)
+
+    for (let i = 0; i < wantedBursts; i++) {
+      carrier.burst()
+    }
+
+    return carrier.nodesInfected
   }
 }

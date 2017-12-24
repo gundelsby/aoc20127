@@ -6,11 +6,5 @@ describe('Mapper', () => {
   #..
   ...`
 
-  it('should mark {x: -1, y: 0} as infected', () => {
-    const output = mapper(input)
-    const expected = {}
-    expected[0] = [-1]
-
-    assert.match(output, expected)
-  })
+  it('should mark {x: -1, y: 0} as infected')
 })

@@ -16,14 +16,6 @@ describe('Carrier', () => {
 
       assert.equals(carrier.currentPosition, {x: -1, y: 0})
     })
-
-    it('should flip infected status when bursting', () => {
-      const position = carrier.currentPosition
-      const isInfected = carrier.isInfected(carrier.currentPosition)
-      carrier.burst()
-
-      assert.equals(carrier.isInfected(position), !isInfected)
-    })
   })
 
   describe('turnLeft', () => {
