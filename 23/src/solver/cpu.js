@@ -89,8 +89,8 @@ module.exports = class {
   process (instruction) {
     const parts = instruction.split(/\s/)
     const operation = parts[0]
-    this.opCounts[operation] = (this.opCounts[operation] || 0) + 1
 
+    this.opCounts[operation] = (this.opCounts[operation] || 0) + 1
     switch (operation) {
       case 'set':
         return this.set(parts[1], this.getValue(parts[2]))
