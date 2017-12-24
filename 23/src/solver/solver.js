@@ -6,10 +6,10 @@ module.exports = {
       id: 0,
       sendMessage: () => {}
     })
+
     cpu.loadProgram(instructions)
     cpu.run()
 
-    console.log(cpu.opCounts)
     return cpu.opCounts['mul'] || 0
   },
   part2: (input) => {

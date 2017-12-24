@@ -55,9 +55,16 @@ module.exports = class {
   }
 
   // jgz X Y jumps with an offset of the value of Y, but only if the value of X is greater than zero. (An offset of 2 skips the next instruction, an offset of -1 jumps to the previous instruction, and so on.)
-  // jnz X Y jumps with an offset of the value of Y, but only if the value of X is not zero. (An offset of 2 skips the next instruction, an offset of -1 jumps to the previous instruction, and so on.)
-  jump (test, offset) {
+  jgz (test, offset) {
     if (test > 0) {
+      this.instructionPointer += offset
+    }
+    return true
+  }
+
+  // jnz X Y jumps with an offset of the value of Y, but only if the value of X is not zero. (An offset of 2 skips the next instruction, an offset of -1 jumps to the previous instruction, and so on.)
+  jnz (test, offset) {
+    if (test !== 0) {
       this.instructionPointer += offset
     }
     return true
@@ -83,6 +90,7 @@ module.exports = class {
     const parts = instruction.split(/\s/)
     const operation = parts[0]
     this.opCounts[operation] = (this.opCounts[operation] || 0) + 1
+
     switch (operation) {
       case 'set':
         return this.set(parts[1], this.getValue(parts[2]))
@@ -94,12 +102,14 @@ module.exports = class {
         return this.mod(parts[1], this.getValue(parts[2]))
       case 'rcv':
         return this.receive(parts[1])
+      case 'jgz':
+        return this.jgz(this.getValue(parts[1]), this.getValue(parts[2]))
       case 'jnz':
-        return this.jump(this.getValue(parts[1]), this.getValue(parts[2]))
+        return this.jnz(this.getValue(parts[1]), this.getValue(parts[2]))
       case 'snd':
         return this.sendValue(this.getValue(parts[1]))
       case 'sub':
-        return this.sub(parts[1], parts[2])
+        return this.sub(parts[1], this.getValue(parts[2]))
       default:
         console.log(`Undefined operation ${operation} in ${instruction}`)
     }
